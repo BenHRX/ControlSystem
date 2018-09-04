@@ -81,6 +81,7 @@ class user_controller extends CI_Controller {
     }
     
     public function add_user_view(){
+        // This is for testing
         $this->load->helper('form');
         $this->load->model('city_model');
         $data['cities'] = $this->city_model->read();

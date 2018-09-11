@@ -70,6 +70,12 @@ $route['city_update/(:any)'] = 'city_controller/update_city_view/$1';
 $route['hospital'] = 'hospital_controller';
 $route['hospital_by_city'] = 'hospital_controller/response_by_city';
 $route['department_by_hospital'] = 'hospital_controller/response_by_hospital';
+$route['hospital_add'] = 'hospital_controller/add_hospital_view';
+$route['department_add'] = 'hospital_controller/add_department_view';
+$route['hospital_delete/(:any)'] = 'hospital_controller/delete_hospital_view/$1';
+$route['department_delete/(:any)/(:any)'] = 'hospital_controller/delete_department_view/$1/$2';
+$route['hospital_update/(:any)'] = 'hospital_controller/update_hospital_view/$1';
+$route['department_update/(:any)/(:any)'] = 'hospital_controller/update_department_view/$1/$2';
 
 // 排班安排控制
 $route['duty'] = 'duty_controller';

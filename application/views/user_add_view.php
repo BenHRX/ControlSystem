@@ -14,7 +14,7 @@ and open the template in the editor.
         crossorigin="anonymous"></script>
 
         <script>
-            var baseUrl = "<?php echo base_url() ?>index.php/"
+            var baseUrl = "<?php echo base_url() ?>index.php/";
             $(document).ready(function () {
                 $('#city_section').change(function () {
                     var city_option = $(this).val();

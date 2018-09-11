@@ -45,7 +45,7 @@ class user_controller extends CI_Controller {
         );
         if ($this->user_model->match($data)) {        // match
             $queue_data['records'] = $this->user_model->list_user($data);
-            var_dump($queue_data);
+//            var_dump($queue_data);
             $this->load->view('user_info_view', $queue_data);
         } else {
             $queue_data['error'] = 'Access Denied';
@@ -89,7 +89,7 @@ class user_controller extends CI_Controller {
     }
     
     public function add_user(){
-        print_r($_POST);
+//        print_r($_POST);
         if(null !== $this->input->post('confirm')){
             $data_input = array(
                 'user_name' => $this->input->post('user_name'),

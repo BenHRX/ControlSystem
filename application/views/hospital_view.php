@@ -15,6 +15,9 @@ and open the template in the editor.
         <!--<a href="<?//php echo base_url() ?>index.php/hospital">医院列表</a>-->
         <a href="<?php echo base_url() ?>index.php/duty">工作安排</a>
         <a href="<?php echo base_url() ?>index.php/order">订单预览</a>
+        <br/>
+        <a href="<?php echo base_url() ?>index.php/hospital_add">添加医院</a>
+        <a href="<?php echo base_url() ?>index.php/department_add">添加科室</a>
         <table border="1">
             <thead>
                 <tr>
@@ -37,7 +40,12 @@ and open the template in the editor.
                     echo "<td>".$row->address."</td>";
                     echo "<td>".$row->hospital_summary."</td>";
                     echo "<td>".$row->department_summary."</td>";
-                    echo "<td>删除 修改</td>";
+//                    echo "<td>删除 修改 删除医院</td>";
+                    echo "<td>";
+                    echo "<a href='".base_url()."/index.php/department_delete/".$row->name."/".$row->depart."'> 删除部门</a>";
+                    echo "<a href='".base_url()."/index.php/department_update/".$row->name."/".$row->depart."'> 修改部门</a>";
+                    echo "<a href='".base_url()."/index.php/hospital_delete/".$row->name."'> 删除医院</a>";
+                    echo "</td>";
                     echo "</tr>";
                 }
                 ?>

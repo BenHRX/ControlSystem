@@ -15,6 +15,8 @@ and open the template in the editor.
         <a href="<?php echo base_url() ?>index.php/hospital">医院列表</a>
         <!--<a href="<?//php echo base_url() ?>index.php/duty">工作安排</a>-->
         <a href="<?php echo base_url() ?>index.php/order">订单预览</a>
+        <br/>
+        <a href="<?php echo base_url() ?>index.php/duty_add">添加排班</a>
         <table border="1">
             <thead>
                 <tr>
@@ -32,7 +34,7 @@ and open the template in the editor.
             </thead>
             <tbody>
                 <?php
-                foreach($records as $row){
+                foreach ($records as $row) {
                     switch ($row->status) {
                         case 0:
                             $current_status = '休诊';
@@ -48,16 +50,21 @@ and open the template in the editor.
                             break;
                     }
                     echo "<tr>";
-                    echo "<td>".$row->doctor_name."</td>";
-                    echo "<td>".$row->date."</td>";
-                    echo "<td>".$current_status."</td>";
-                    echo "<td>".$row->time_slot_1."</td>";
-                    echo "<td>".$row->time_slot_2."</td>";
-                    echo "<td>".$row->time_slot_3."</td>";
-                    echo "<td>".$row->time_slot_4."</td>";
-                    echo "<td>".$row->time_slot_5."</td>";
-                    echo "<td>".$row->time_slot_6."</td>";
-                    echo "<td><input type='hidden' value='".$row->doctor_id."'/>修改 删除</td>";
+                    echo "<td>" . $row->doctor_name . "</td>";
+                    echo "<td>" . $row->date . "</td>";
+                    echo "<td>" . $current_status . "</td>";
+                    echo "<td>" . $row->time_slot_1 . "</td>";
+                    echo "<td>" . $row->time_slot_2 . "</td>";
+                    echo "<td>" . $row->time_slot_3 . "</td>";
+                    echo "<td>" . $row->time_slot_4 . "</td>";
+                    echo "<td>" . $row->time_slot_5 . "</td>";
+                    echo "<td>" . $row->time_slot_6 . "</td>";
+                    echo "<td>";
+//                    echo "<a href='".base_url()."/index.php/duty_delete/".$row->doctor_id."/".$row->doctor_name."/".$row->date."'>删除 </a>";
+//                    echo "<a href='".base_url()."/index.php/duty_update/".$row->doctor_id."/".$row->doctor_name."/".$row->date."'>修改 </a>";
+                    echo "<a href='" . base_url() . "/index.php/duty_delete/" . $row->date . "'>删除 </a>";
+                    echo "<a href='" . base_url() . "/index.php/duty_update/" . $row->date . "'>修改 </a>";
+                    echo "</td>";
                     echo "</tr>";
                 }
                 ?>

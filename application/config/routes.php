@@ -79,6 +79,11 @@ $route['department_update/(:any)/(:any)'] = 'hospital_controller/update_departme
 
 // 排班安排控制
 $route['duty'] = 'duty_controller';
+$route['duty_add'] = 'duty_controller/add_duty_view';
+//$route['duty_delete/(:num)/(:any)/(:any)'] = 'duty_controller/delete_duty_view/$1/$2/$3';
+//$route['duty_update/(:num)/(:any)/(:any)'] = 'duty_controller/update_duty_view/$1/$2/$3';
+$route['duty_delete/(:any)'] = 'duty_controller/delete_duty_view/$1';
+$route['duty_update/(:any)'] = 'duty_controller/update_duty_view/$1';
 
 // 订单控制
 $route['order'] = 'order_controller';

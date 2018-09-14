@@ -24,12 +24,25 @@ class duty_model extends CI_Model {
         return $result_set->result();
     }
 
-    public function duty_add() {
-        
+    public function read_by($condition) {
+        foreach ($condition as $key => $value) {
+            $this->db->where($key, $value);
+        }
+//        var_dump($this->db->get_compiled_select('duty'));
+        return($this->db->get('duty')->result());
     }
 
-    public function duty_delete() {
-        
+    public function duty_add($data) {
+        return($this->db->insert('duty', $data));
+    }
+
+    public function duty_delete($condition) {
+        $this->db->from("duty");
+        foreach ($condition as $key => $value) {
+            $this->db->where($key, $value);
+        }
+//        var_dump($this->db->get_compiled_delete());
+        return($this->db->delete());
     }
 
     public function duty_update() {

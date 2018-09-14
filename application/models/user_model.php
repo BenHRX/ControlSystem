@@ -18,7 +18,7 @@ class user_model extends CI_Model {
     }
 
     public function match($data) {
-        $this->db->select('user_id, user_name, user_access, hospital, department');
+        $this->db->select('user_id, user_name, user_access, name, hospital, department');
         $this->db->where('user_name', $data['user_name']);
         $this->db->where('user_pwd', $data['user_pwd']);
         $result_set = $this->db->get('doctor');
@@ -28,6 +28,7 @@ class user_model extends CI_Model {
             $session_array = array(
                 "id" => $row['user_id'],
                 "user" => $row['user_name'],
+                "real_name" => $row['name'],
                 "access_right" => $row['user_access'],
                 "user_hospital" => $row['hospital'],
                 "user_department" => $row['department'],

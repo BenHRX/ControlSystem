@@ -97,11 +97,44 @@ class duty_controller extends CI_Controller {
     }
 
     public function update_duty_view() {
-        
+        $user_id = $this->session->userdata('id');
+        $user_name = $this->session->userdata('real_name');
+        $this->load->helper('form');
+        $this->load->model('duty_model');
+        $condition = array(
+            'doctor_id' => $user_id,
+            'doctor_name' => $user_name,
+            'date' => $this->uri->segment('2'),
+        );
+        $data['records'] = $this->duty_model->read_by($condition);
+        $data['user_name'] = $user_name;
+//        $this->load->view('void');
+        $this->load->view('duty_update_view', $data);
     }
 
     public function update_duty() {
-        
+        if(null !== $this->input->post('confirm')){
+            $user_id = $this->session->userdata('id');
+            $user_name = $this->session->userdata('real_name');
+            $this->load->model('duty_model');
+            $condition = array(
+                'doctor_id' => $user_id,
+                'doctor_name' => $user_name,
+                'date' => $this->input->post("date"),
+            );
+            $changed_status = $this->input->post('status_group');
+            $data_set = array(
+                'status' => $changed_status,
+                'time_slot_1' => ($changed_status === '1' ? $this->input->post('time_slot')[0] : '0'),
+                'time_slot_2' => ($changed_status === '1' ? $this->input->post('time_slot')[1] : '0'),
+                'time_slot_3' => ($changed_status === '1' ? $this->input->post('time_slot')[2] : '0'),
+                'time_slot_4' => ($changed_status === '1' ? $this->input->post('time_slot')[3] : '0'),
+                'time_slot_5' => ($changed_status === '1' ? $this->input->post('time_slot')[4] : '0'),
+                'time_slot_6' => ($changed_status === '1' ? $this->input->post('time_slot')[5] : '0'),
+            );
+            $this->duty_model->duty_update($data_set, $condition);
+        }
+        $this->index();
     }
 
 }

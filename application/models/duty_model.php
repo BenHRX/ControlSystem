@@ -45,8 +45,13 @@ class duty_model extends CI_Model {
         return($this->db->delete());
     }
 
-    public function duty_update() {
-        
+    public function duty_update($data, $condition) {
+        $this->db->set($data);
+        foreach ($condition as $key => $value) {
+            $this->db->where($key, $value);
+        }
+        return($this->db->update('duty'));
+//        var_dump($this->db->get_compiled_update('duty'));
     }
 
 }

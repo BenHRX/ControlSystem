@@ -10,6 +10,7 @@ and open the template in the editor.
         <title></title>
     </head>
     <body>
+        <?php date_default_timezone_set('Asia/Hong_Kong'); ?>
         <a href="<?php echo base_url() ?>index.php/user">用户信息</a>
         <a href="<?php echo base_url() ?>index.php/city">城市列表</a>
         <a href="<?php echo base_url() ?>index.php/hospital">医院列表</a>
@@ -62,8 +63,13 @@ and open the template in the editor.
                     echo "<td>";
 //                    echo "<a href='".base_url()."/index.php/duty_delete/".$row->doctor_id."/".$row->doctor_name."/".$row->date."'>删除 </a>";
 //                    echo "<a href='".base_url()."/index.php/duty_update/".$row->doctor_id."/".$row->doctor_name."/".$row->date."'>修改 </a>";
-                    echo "<a href='" . base_url() . "/index.php/duty_delete/" . $row->date . "'>删除 </a>";
-                    echo "<a href='" . base_url() . "/index.php/duty_update/" . $row->date . "'>修改 </a>";
+                    $convert_date = strtotime($row->date);
+                    if (time() < $convert_date) {
+                        echo "<a href='" . base_url() . "/index.php/duty_delete/" . $row->date . "'>删除 </a>";
+                        echo "<a href='" . base_url() . "/index.php/duty_update/" . $row->date . "'>修改 </a>";
+                    }else{
+                        echo "仅限浏览";
+                    }
                     echo "</td>";
                     echo "</tr>";
                 }

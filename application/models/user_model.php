@@ -87,5 +87,13 @@ class user_model extends CI_Model {
     public function add_by($data){
         return($this->db->insert('doctor', $data));
     }
+    
+    public function update_by($data, $condition){
+        $this->db->set($data);
+        foreach ($condition as $key => $value) {
+            $this->db->where($key, $value);
+        }
+        return($this->db->update('doctor'));
+    }
 
 }

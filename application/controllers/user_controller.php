@@ -79,18 +79,84 @@ class user_controller extends CI_Controller {
         }
         $this->index();
     }
-    
-    public function add_user_view(){
+
+    public function update_user_view($id = null) {
+        if ($id == null) {
+            $user_id = $this->uri->segment('2');
+        } else {
+            $user_id = $id;
+        }
+
+        $this->load->model("user_model");
+        $this->load->helper('form');
+
+        $data_array = array(
+            0 => array('column' => 'user_id',
+                'value' => $user_id),
+        );
+        $data['records'] = $this->user_model->read_by($data_array);
+
+        $this->load->model("hospital_model");
+        $data['hospitals'] = $this->hospital_model->hospital_in_city(null);
+        $this->load->model("hospital_model");
+        
+        $condition = array(
+            0 => array(
+                'column' => 'hospital',
+                'value' =>  $data['records'][0]->hospital,
+            ),
+        );
+        $data['departments'] = $this->hospital_model->department_in_hospital($condition);
+
+        $this->load->view('user_update_view', $data);
+    }
+
+    public function update_user() {
+        if(null === $this->input->post("update"))
+        {
+            $this->index();
+            return;
+        }
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('confirm_pwd', "Confirm password", "required", array('required' => 'You must provide a %s'));
+        if ($this->form_validation->run() == FALSE) {
+            $this->update_user_view($this->input->post('user_id'));
+        } else {
+            $this->load->model('user_model');
+            // validate current user, refresh session??
+            $data = array(
+                "user_name" => $this->session->userdata("user"),
+                "user_pwd" => $this->input->post("confirm_pwd"),
+            );
+            if ($this->user_model->match($data)) {
+                // Set update data
+                $data_set = array(
+                    "name" => $this->input->post("new_real_name"),
+                    "hospital" => $this->input->post("hospital_list"),
+                    "department" => $this->input->post("department_list"),
+                    "major" => $this->input->post("new_major"),
+                    "description" => $this->input->post("new_description"),
+                );
+                $condition = array(
+                    "user_id" => $this->input->post("user_id"),
+                );
+                $this->user_model->update_by($data_set, $condition);
+            }
+        }
+        $this->index();
+    }
+
+    public function add_user_view() {
         // This is for testing
         $this->load->helper('form');
         $this->load->model('city_model');
         $data['cities'] = $this->city_model->read();
         $this->load->view('user_add_view', $data);
     }
-    
-    public function add_user(){
+
+    public function add_user() {
 //        print_r($_POST);
-        if(null !== $this->input->post('confirm')){
+        if (null !== $this->input->post('confirm')) {
             $data_input = array(
                 'user_name' => $this->input->post('user_name'),
                 'user_pwd' => $this->input->post('user_password'),

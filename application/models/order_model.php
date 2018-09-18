@@ -34,7 +34,7 @@ class order_model extends CI_Model {
     }
 
     public function delete_order() {
-        
+        // 订单不应该由系统这端删除, 可以开放给客户操作?
     }
 
     public function update_order() {

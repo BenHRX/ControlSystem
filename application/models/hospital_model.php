@@ -30,7 +30,7 @@ class hospital_model extends CI_Model {
         $this->db->select('name, department.department AS depart, city, address, hospital.description AS hospital_summary, department.description AS department_summary');
         $this->db->from('hospital');
         $this->db->join('department', 'department.hospital = hospital.name', 'left');
-        foreach($condition as $c){
+        foreach ($condition as $c) {
             $this->db->where($c['column'], $c['value']);
         }
         $result_set = $this->db->get();
@@ -53,12 +53,12 @@ class hospital_model extends CI_Model {
         // just one condition should be here - hospital name
         // Here should also delete the coresponding user / booking ??
         $delete_array = array(
-           0=>array(
-               'column' => 'hospital',
-               'value' => $hospital_name,
-           ),
+            0 => array(
+                'column' => 'hospital',
+                'value' => $hospital_name,
+            ),
         );
-        if(!$this->department_delete_by_condition($delete_array)){
+        if (!$this->department_delete_by_condition($delete_array)) {
             return false;
         }
         $this->db->from('hospital');
@@ -66,8 +66,8 @@ class hospital_model extends CI_Model {
 //        var_dump($this->db->get_compiled_delete());
         return($this->db->delete());
     }
-       
-    public function department_delete_by_condition($condition){
+
+    public function department_delete_by_condition($condition) {
         // Intent to use 1 condition only for deleting the whole hospital. if need to delete whole hospital department, use hospital name as condition
         $this->db->from('department');
         foreach ($condition as $c) {
@@ -77,10 +77,21 @@ class hospital_model extends CI_Model {
         return($this->db->delete());
     }
 
+    public function department_update_by_condition($data, $condition) {
+        $this->db->set($data);
+        foreach ($condition as $key => $value) {
+            $this->db->where($key, $value);
+        }
+        return($this->db->update('department'));
+//        var_dump($this->db->get_compiled_update('department'));
+    }
+
     public function hospital_in_city($condition) {
-        $this->db->select("name");
-        foreach ($condition as $c) {
-            $this->db->where($c['column'], $c['value']);
+        $this->db->select("name, city");
+        if(null !== $condition) {
+            foreach ($condition as $c) {
+                $this->db->where($c['column'], $c['value']);
+            }
         }
         return $this->db->get('hospital')->result_array();  // return array
     }

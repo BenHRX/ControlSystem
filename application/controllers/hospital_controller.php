@@ -79,7 +79,18 @@ class hospital_controller extends CI_Controller {
     }
 
     public function update_hospital_view() {
-        
+        // Currently no update this.
+        $hospital_name = urldecode($this->uri->segment('2'));
+        $this->load->helper('form');
+        $this->load->model('hospital_model');
+        $condition_array = array(
+            0 => array(
+                'column' => 'name',
+                'value' => $hospital_name,
+            ),
+        );
+        $data['records'] = $this->hospital_model->hospital_read_by_condition($condition_array);
+        $this->load->view('hospital_update_view', $data);
     }
 
     public function update_hospital() {
@@ -87,11 +98,39 @@ class hospital_controller extends CI_Controller {
     }
 
     public function update_department_view() {
-        
+        $hospital_name = urldecode($this->uri->segment('2'));
+        $department_name = urldecode($this->uri->segment('3'));
+        $this->load->helper('form');
+        $this->load->model('hospital_model');
+        $condition_array = array(
+            0 => array(
+                'column' => 'department.department',
+                'value' => $department_name,
+            ),
+            1 => array(
+                'column' => 'name',
+                'value' => $hospital_name,
+            ),
+        );
+        // This should limit to one record
+        $data['record'] = $this->hospital_model->hospital_read_by_condition($condition_array);
+        $this->load->view('department_update_view', $data);
     }
 
     public function update_department() {
-        
+        if (null !== $this->input->post("accept")) {
+            $this->load->model('hospital_model');
+            $data = array(
+                'department' => $this->input->post("new_department"),
+                'description' => $this->input->post("new_depart_summary")
+            );
+            $condition_array = array(
+                'department' => $this->input->post("old_department_name"),
+                'hospital' => $this->input->post("hospital_name"),
+            );
+            $this->hospital_model->department_update_by_condition($data, $condition_array);
+        }
+        $this->index();
     }
 
     public function delete_hospital_view() {
@@ -158,16 +197,22 @@ class hospital_controller extends CI_Controller {
     // For Ajax use
     public function response_by_city() {
         $this->load->model('hospital_model');
-        $city = $this->input->post('city');
-        $condition_array = array(
-            0 => array(
-                'column' => 'city',
-                'value' => $city,
-            )
-        );
-        $response = $this->hospital_model->hospital_in_city($condition_array);
+        $response = $this->hospital_model->hospital_in_city(null);
         echo json_encode($response);
     }
+
+//    public function response_full_hospitals() {
+//        $this->load->model('hospital_model');
+//        $city = $this->input->post('city');
+//        $condition_array = array(
+//            0 => array(
+//                'column' => 'city',
+//                'value' => $city,
+//            )
+//        );
+//        $response = $this->hospital_model->hospital_in_city($condition_array);
+//        echo json_encode($response);
+//    }
 
     public function response_by_hospital() {
         $this->load->model('hospital_model');

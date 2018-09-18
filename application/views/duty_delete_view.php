@@ -22,6 +22,7 @@ and open the template in the editor.
             break;
         case '2':
             echo "约满";
+            break;
         default:
             echo "出诊";
     }

@@ -24,4 +24,6 @@ class order_controller extends CI_Controller{
         $this->load->view('order_view', $data);
     }
     
+    // 删除订单不应该由服务器这端直接删除, 流程可以是先递交申请到客服联络客户,确认可以修改/删除
+    
 }

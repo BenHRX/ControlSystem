@@ -77,6 +77,8 @@ and open the template in the editor.
                 ?>
             </tbody>
         </table>
-
+        <?php
+//        var_dump($_SERVER);
+        ?>
     </body>
 </html>

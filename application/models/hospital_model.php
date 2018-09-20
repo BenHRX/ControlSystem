@@ -103,5 +103,15 @@ class hospital_model extends CI_Model {
         }
         return $this->db->get('department')->result_array();  // return array
     }
+    
+    public function department_in_city($condition){
+        $this->db->select('name, department.department AS depart, city, address, hospital.description AS hospital_summary, department.description AS department_summary, view_photo');
+        $this->db->from('hospital');
+        $this->db->join('department', 'department.hospital = hospital.name'); 
+        foreach ($condition as $key => $value) {
+            $this->db->where($key, $value);
+        }
+        return($this->db->get()->result_array());
+    }
 
 }

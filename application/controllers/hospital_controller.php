@@ -227,4 +227,36 @@ class hospital_controller extends CI_Controller {
         echo json_encode($response);
     }
 
+    public function response_detail_by_city() {
+        $this->load->model('hospital_model');
+//        $city_name = urldecode($this->uri->segment('3'));   微信小程序的两种通信方式举例
+//        echo json_encode($_POST);
+        $city_name = $this->input->post('city');
+        $condition_array = array(
+//            'city' => $this->input->post('city'),
+            'city' => $city_name,
+        );
+        // For test purpose only
+//        $this->load->helper('file');
+//        if (!write_file('log_data.txt', $city_name, 'a')) {   // 放于ControlSystem下面
+////            echo 'Unable to write the file';
+//        } else {
+////            echo 'File written!';
+//        }
+//        var_dump(get_file_info('log_data.txt'));
+//        echo file_get_contents('log_data.txt');
+        // Test used end
+        $response_array = $this->hospital_model->department_in_city($condition_array);
+        echo json_encode($response_array);
+    }
+    
+    public function response_detail_by_department(){
+        $this->load->model('hospital_model');
+        $condition_array = array(
+            'city' => $this->input->post('city'),
+            'department.department' => $this->input->post('department'),
+        );
+        echo json_encode($this->hospital_model->department_in_city($condition_array));
+    }
+
 }

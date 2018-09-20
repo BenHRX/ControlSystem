@@ -91,4 +91,11 @@ class city_controller extends CI_Controller {
         $this->index();
     }
 
+    // For Ajax or Wechat request using data
+    public function response_city_list() {
+        $this->load->model('city_model');
+        $response = $this->city_model->read();
+        echo json_encode($response);
+    }
+
 }

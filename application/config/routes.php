@@ -65,6 +65,7 @@ $route['city'] = 'city_controller';
 $route['city_add'] = 'city_controller/add_city_view';
 $route['city_delete/(:any)'] = 'city_controller/delete_city_view/$1';
 $route['city_update/(:any)'] = 'city_controller/update_city_view/$1';
+$route['getCityArray'] = 'city_controller/response_city_list';
 
 // 医院,部门控制
 $route['hospital'] = 'hospital_controller';
@@ -76,6 +77,7 @@ $route['hospital_delete/(:any)'] = 'hospital_controller/delete_hospital_view/$1'
 $route['department_delete/(:any)/(:any)'] = 'hospital_controller/delete_department_view/$1/$2';
 $route['hospital_update/(:any)'] = 'hospital_controller/update_hospital_view/$1';
 $route['department_update/(:any)/(:any)'] = 'hospital_controller/update_department_view/$1/$2';
+$route['detail_in_city/(:any)'] = 'hospital_controller/response_detail_by_city/$1';  // Post 不能用吧?
 
 // 排班安排控制
 $route['duty'] = 'duty_controller';

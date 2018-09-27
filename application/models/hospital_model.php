@@ -113,5 +113,19 @@ class hospital_model extends CI_Model {
         }
         return($this->db->get()->result_array());
     }
+    
+    public function detail_for_hospital($condition){
+        $hospital_detail = [];
+        foreach ($condition as $key => $value) {
+             $this->db->where($key, $value);
+        }
+        $hospital_detail['info'] = $this->db->get('hospital')->result_array();   // All value returned.
+        $this->db->select("department");
+        foreach ($condition as $c) {
+            $this->db->where('hospital', $c);
+        }
+        $hospital_detail['department'] = $this->db->get('department')->result_array();
+        return $hospital_detail;
+    }
 
 }

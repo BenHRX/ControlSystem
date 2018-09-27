@@ -53,8 +53,8 @@ class user_model extends CI_Model {
         }
         return $result_set->result();
     }
-    
-    public function refresh_data($data){
+
+    public function refresh_data($data) {
         $this->db->select('user_id, user_name, user_access, name, hospital, department, major, description');
         $this->db->where('user_name', $data['user_name']);
         $result_set = $this->db->get('doctor');
@@ -66,34 +66,75 @@ class user_model extends CI_Model {
         }
         return $result_set->result();
     }
-    
-    public function read_by($condition){
+
+    public function read_by($condition) {
         $this->db->select('user_id, user_name, user_access, name, hospital, department, major, description');
-        foreach($condition as $c){
+        foreach ($condition as $c) {
             $this->db->where($c['column'], $c['value']);
         }
         $result_set = $this->db->get('doctor');
         return $result_set->result();
     }
-    
-    public function delete_by($condition){
+
+    public function delete_by($condition) {
         $this->db->from('doctor');
         foreach ($condition as $c) {
             $this->db->where($c['column'], $c['value']);
         }
         return($this->db->delete());
     }
-    
-    public function add_by($data){
+
+    public function add_by($data) {
         return($this->db->insert('doctor', $data));
     }
-    
-    public function update_by($data, $condition){
+
+    public function update_by($data, $condition) {
         $this->db->set($data);
         foreach ($condition as $key => $value) {
             $this->db->where($key, $value);
         }
         return($this->db->update('doctor'));
+    }
+
+    public function get_user_by_condition($condition) {
+        $this->db->from('doctor');
+        $this->db->join('duty', 'doctor.user_id = duty.doctor_id');
+        $this->db->select('doctor.user_id AS userId, name, hospital, department, major, photo_path, description, duty.date AS duty_date, duty.status AS status, duty.time_slot_1 AS period1, duty.time_slot_2 AS period2, duty.time_slot_3 AS period3, duty.time_slot_4 AS period4, duty.time_slot_5 AS period5, duty.time_slot_6 AS period6');
+        foreach ($condition as $key => $value) {
+            $this->db->where($key, $value);
+        }
+        return($this->db->get()->result_array());
+    }
+
+    public function get_city_user_info($condition) {
+        $this->db->from('doctor');
+        $this->db->join('hospital', 'doctor.hospital = hospital.name');
+        $this->db->select('doctor.user_id AS userId, doctor.name AS real_name, hospital, department, major, photo_path, doctor.description AS doctor_summary, hospital.city AS city');
+        foreach ($condition as $key => $value) {
+            $this->db->where($key, $value);
+        }
+        return($this->db->get()->result_array());
+    }
+
+    public function get_user_period_duty($condition, $no_date_condition) {
+        $this->db->from('doctor');
+        $this->db->join('duty', 'doctor.user_id = duty.doctor_id', 'left');
+        $this->db->select('doctor.user_id AS userId, name, hospital, department, major, photo_path, description, duty.date AS duty_date, duty.status AS status, duty.time_slot_1 AS period1, duty.time_slot_2 AS period2, duty.time_slot_3 AS period3, duty.time_slot_4 AS period4, duty.time_slot_5 AS period5, duty.time_slot_6 AS period6');
+        foreach ($condition as $key => $value) {
+            $this->db->where($key, $value);
+        }
+        $result_set = $this->db->get()->result_array();
+        if (count($result_set) !== 0) {
+            return $result_set;
+        } else {
+            $this->db->from('doctor');
+            $this->db->join('duty', 'doctor.user_id = duty.doctor_id', 'left');
+            $this->db->select('doctor.user_id AS userId, name, hospital, department, major, photo_path, description, duty.date AS duty_date, duty.status AS status, duty.time_slot_1 AS period1, duty.time_slot_2 AS period2, duty.time_slot_3 AS period3, duty.time_slot_4 AS period4, duty.time_slot_5 AS period5, duty.time_slot_6 AS period6');
+            foreach ($no_date_condition as $key => $value) {
+                $this->db->where($key, $value);
+            }
+            return $this->db->get()->result_array();
+        }
     }
 
 }

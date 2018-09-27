@@ -258,5 +258,14 @@ class hospital_controller extends CI_Controller {
         );
         echo json_encode($this->hospital_model->department_in_city($condition_array));
     }
+    
+    public function response_hospital_detail(){    
+        $this->load->model('hospital_model');
+        $condition_array = array(
+            'name' => $this->input->post('hospital'),
+        );
+        $data = $this->hospital_model->detail_for_hospital($condition_array);
+        echo json_encode($data);
+    }
 
 }

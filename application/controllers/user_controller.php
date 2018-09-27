@@ -99,11 +99,11 @@ class user_controller extends CI_Controller {
         $this->load->model("hospital_model");
         $data['hospitals'] = $this->hospital_model->hospital_in_city(null);
         $this->load->model("hospital_model");
-        
+
         $condition = array(
             0 => array(
                 'column' => 'hospital',
-                'value' =>  $data['records'][0]->hospital,
+                'value' => $data['records'][0]->hospital,
             ),
         );
         $data['departments'] = $this->hospital_model->department_in_hospital($condition);
@@ -112,8 +112,7 @@ class user_controller extends CI_Controller {
     }
 
     public function update_user() {
-        if(null === $this->input->post("update"))
-        {
+        if (null === $this->input->post("update")) {
             $this->index();
             return;
         }
@@ -171,6 +170,60 @@ class user_controller extends CI_Controller {
             $this->user_model->add_by($data_input);
         }
         $this->index();
+    }
+
+    // For wechat program
+    public function get_user_info() {
+        // This is to get the user info by many conditions
+        $raw_date = $this->input->post('date');
+        $year_index = strpos($raw_date, '年');
+        $month_index = strpos($raw_date, '月');
+        $day_index = strpos($raw_date, '日');
+        $clean_date = substr($raw_date, 0, 4) . "-" .
+                substr($raw_date, $month_index - 2, 2) . "-" .
+                substr($raw_date, $day_index - 2, 2);
+        if (null === $this->input->post('hospital') && null === $this->input->post('department')) {
+            $condition_array = array(
+                'duty.date' => $clean_date,
+            );
+        } else {
+            $condition_array = array(
+                'hospital' => $this->input->post('hospital'),
+                'department' => $this->input->post('department'),
+                'duty.date' => $clean_date,
+            );
+        }
+        $this->load->model('user_model');
+        $data_array = $this->user_model->get_user_by_condition($condition_array);
+        echo json_encode($data_array);
+    }
+
+    /* This function is get the list by city position only */
+    /* Expect the doctor list in this city */
+    public function get_user_by_city() {
+        $condition_array = array(
+            'hospital.city' => $this->input->post('city_name'),
+            'user_access !=' => 9,
+        );
+        $this->load->model('user_model');
+        $data_array = $this->user_model->get_city_user_info($condition_array);
+        echo json_encode($data_array);
+    }
+    
+    public function get_user_duty_by_period(){
+        $condition_array = array(
+            'name' => $this->input->post('doctor_name'),
+            'doctor.user_id' => $this->input->post('doctor_id'),
+            'duty.date >=' => $this->input->post('start_date'),
+            'duty.date <=' => $this->input->post('end_date'),
+        );
+        $another_array = array(
+            'name' => $this->input->post('doctor_name'),
+            'doctor.user_id' => $this->input->post('doctor_id'),            
+        );
+        $this->load->model('user_model');
+        $data_array = $this->user_model->get_user_period_duty($condition_array, $another_array);
+        echo json_encode($data_array);
     }
 
 }

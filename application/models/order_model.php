@@ -29,8 +29,15 @@ class order_model extends CI_Model {
         return $result_set->result();
     }
 
-    public function add_order() {
-        
+    public function add_order_by($data) {
+        return $this->db->insert("orders", $data);
+    }
+    
+    public function read_by($condition){
+        foreach ($condition as $key => $value) {
+            $this->db->where($key, $value);
+        }
+        return $this->db->get('orders')->result();
     }
 
     public function delete_order() {
